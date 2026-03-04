@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevAudit — Your Codebase's Second Brain</title>
+    <meta
+      name="description"
+      content="Drop your GitHub repo. Get a brutal, honest, senior-engineer-level audit with AI agents that actually fix things."
+    />
+    <meta name="theme-color" content="#1A1A1A" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=satoshi@200,300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Noise SVG Filter -->
+    <svg style="display: none">
+      <filter id="noise">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.8"
+          numOctaves="4"
+          stitchTiles="stitch"
+        />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+    </svg>
+  </head>
+  <body>
+    <!-- ─── NAVIGATION ─── -->
+    <nav class="nav" id="nav">
+      <div class="nav__inner container">
+        <a href="#" class="nav__logo">
+          <span class="nav__logo-icon">&#9670;</span>
+          DevAudit
+        </a>
+        <ul class="nav__links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <a href="#hero" class="nav__cta btn btn--small btn--accent"
+          >Get Started</a
+        >
+        <button class="nav__burger" id="navBurger" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ─── HERO ─── -->
+    <section class="hero" id="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
+      <div class="hero__content container">
+        <div class="hero__text">
+          <span class="hero__badge">Powered by 5 AI Agents</span>
+          <h1 class="hero__title">
+            Your Codebase's<br />
+            <em>Second Brain</em>
+          </h1>
+          <p class="hero__subtitle">
+            Drop your GitHub repo. Get a brutal, honest, senior-engineer-level
+            audit&nbsp;— with agents that actually fix things.
+          </p>
+          <div class="hero__actions">
+            <a href="#" class="btn btn--accent btn--large">Audit Your Repo</a>
+            <a href="#features" class="btn btn--ghost btn--large"
+              >See How It Works</a
+            >
+          </div>
+        </div>
+        <div class="hero__visual" id="heroVisual">
+          <div class="terminal">
+            <div class="terminal__chrome">
+              <span class="terminal__dot terminal__dot--red"></span>
+              <span class="terminal__dot terminal__dot--yellow"></span>
+              <span class="terminal__dot terminal__dot--green"></span>
+              <span class="terminal__title">devaudit — audit running</span>
+            </div>
+            <div class="terminal__body">
+              <div class="terminal__line terminal__line--agent">
+                <span class="terminal__icon">🔍</span>
+                <span class="terminal__agent">Code Quality Agent</span>
+                <span class="terminal__status terminal__status--active"
+                  >scanning...</span
+                >
+              </div>
+              <div class="terminal__line terminal__line--finding">
+                <span class="terminal__severity terminal__severity--high"
+                  >HIGH</span
+                >
+                God function detected in
+                <span class="terminal__file">api/handlers.py</span> (342 lines)
+              </div>
+              <div class="terminal__line terminal__line--finding">
+                <span class="terminal__severity terminal__severity--med"
+                  >MED</span
+                >
+                Unused import in
+                <span class="terminal__file">utils/helpers.py:3</span>
+              </div>
+              <div class="terminal__line terminal__line--agent">
+                <span class="terminal__icon">🔒</span>
+                <span class="terminal__agent">Security Agent</span>
+                <span class="terminal__status terminal__status--active"
+                  >scanning...</span
+                >
+              </div>
+              <div class="terminal__line terminal__line--finding">
+                <span class="terminal__severity terminal__severity--crit"
+                  >CRIT</span
+                >
+                Hardcoded API key in
+                <span class="terminal__file">config.py:17</span>
+              </div>
+              <div class="terminal__line terminal__line--finding">
+                <span class="terminal__severity terminal__severity--high"
+                  >HIGH</span
+                >
+                SQL injection risk in
+                <span class="terminal__file">db/queries.py:89</span>
+              </div>
+              <div class="terminal__line terminal__line--agent">
+                <span class="terminal__icon">📈</span>
+                <span class="terminal__agent">Scalability Agent</span>
+                <span class="terminal__status terminal__status--done"
+                  >done</span
+                >
+              </div>
+              <div class="terminal__line terminal__line--agent">
+                <span class="terminal__icon">🛠️</span>
+                <span class="terminal__agent">Fix Agent</span>
+                <span class="terminal__status terminal__status--active"
+                  >generating patches...</span
+                >
+              </div>
+              <div class="terminal__line terminal__line--success">
+                <span class="terminal__check">✓</span>
+                PR #142 opened:
+                <span class="terminal__file">Remove hardcoded secrets</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── HOW IT WORKS ─── -->
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <span class="section-label">How It Works</span>
+        <h2 class="section-title">
+          From URL to Pull Request<br />in&nbsp;minutes
+        </h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step__number">01</div>
+            <h3 class="step__title">Paste Your Repo</h3>
+            <p class="step__desc">
+              Drop any GitHub URL — public or private. One click, that's it.
+            </p>
+          </div>
+          <div class="step__divider" aria-hidden="true"></div>
+          <div class="step">
+            <div class="step__number">02</div>
+            <h3 class="step__title">Agents Analyze</h3>
+            <p class="step__desc">
+              5 specialized AI agents tear through your code in parallel, each
+              with domain expertise.
+            </p>
+          </div>
+          <div class="step__divider" aria-hidden="true"></div>
+          <div class="step">
+            <div class="step__number">03</div>
+            <h3 class="step__title">Get Your Report</h3>
+            <p class="step__desc">
+              Interactive dashboard with severity scores, affected files, and
+              before/after diffs.
+            </p>
+          </div>
+          <div class="step__divider" aria-hidden="true"></div>
+          <div class="step">
+            <div class="step__number">04</div>
+            <h3 class="step__title">Auto-Fix PRs</h3>
+            <p class="step__desc">
+              Not just problems — actual solutions. The Fix Agent opens real
+              GitHub PRs.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FEATURES / WHY US ─── -->
+    <section class="features" id="features">
+      <div class="container">
+        <span class="section-label">Why DevAudit</span>
+        <h2 class="section-title">Five agents. One brutal audit.</h2>
+        <div class="features__grid">
+          <div class="feature-card">
+            <div class="feature-card__icon">🔍</div>
+            <h3 class="feature-card__title">Code Quality</h3>
+            <p class="feature-card__desc">
+              Spots anti-patterns, dead code, god functions, and bad naming
+              conventions that slip past linters.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon">🔒</div>
+            <h3 class="feature-card__title">Security</h3>
+            <p class="feature-card__desc">
+              Finds exposed secrets, SQL injection risks, unsafe eval(), and
+              weak authentication patterns.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon">📈</div>
+            <h3 class="feature-card__title">Scalability</h3>
+            <p class="feature-card__desc">
+              Flags N+1 queries, missing indexes, synchronous blocking calls —
+              what breaks at 10x traffic.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon">📝</div>
+            <h3 class="feature-card__title">Documentation</h3>
+            <p class="feature-card__desc">
+              Rewrites your README, generates missing docstrings, and creates a
+              proper .env.example file.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card__icon">🛠️</div>
+            <h3 class="feature-card__title">Auto-Fix</h3>
+            <p class="feature-card__desc">
+              Opens actual GitHub PRs with suggested fixes. One commit per
+              issue, clear descriptions.
+            </p>
+          </div>
+
+          <div class="feature-card feature-card--highlight">
+            <div class="feature-card__icon">⚡</div>
+            <h3 class="feature-card__title">Real-Time</h3>
+            <p class="feature-card__desc">
+              Watch agents work live. Streaming output like a CI terminal. No
+              waiting for a PDF report.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PRICING ─── -->
+    <section class="pricing" id="pricing">
+      <div class="container">
+        <span class="section-label">Pricing</span>
+        <h2 class="section-title pricing__title">
+          Simple, transparent pricing
+        </h2>
+        <p class="section-subtitle">
+          Start free. Upgrade when your team needs more.
+        </p>
+        <div class="pricing__grid">
+          <div class="pricing-card">
+            <h3 class="pricing-card__tier">Starter</h3>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">$0</span>
+              <span class="pricing-card__period">/month</span>
+            </div>
+            <p class="pricing-card__desc">For trying things out</p>
+            <ul class="pricing-card__features">
+              <li>1 public repo per month</li>
+              <li>3 analysis agents</li>
+              <li>Basic report</li>
+              <li>Community support</li>
+            </ul>
+            <a href="#" class="btn btn--outline btn--full">Get Started Free</a>
+          </div>
+
+          <div class="pricing-card pricing-card--pro">
+            <span class="pricing-card__badge">Most Popular</span>
+            <h3 class="pricing-card__tier">Pro</h3>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">$29</span>
+              <span class="pricing-card__period">/month</span>
+            </div>
+            <p class="pricing-card__desc">For individual developers</p>
+            <ul class="pricing-card__features">
+              <li>Unlimited repos</li>
+              <li>All 5 agents</li>
+              <li>Auto-fix PRs</li>
+              <li>Private repo support</li>
+              <li>Priority queue</li>
+              <li>Audit history</li>
+            </ul>
+            <a href="#" class="btn btn--accent btn--full">Start Pro Trial</a>
+          </div>
+
+          <div class="pricing-card">
+            <h3 class="pricing-card__tier">Team</h3>
+            <div class="pricing-card__price">
+              <span class="pricing-card__amount">$79</span>
+              <span class="pricing-card__period">/month</span>
+            </div>
+            <p class="pricing-card__desc">For engineering teams</p>
+            <ul class="pricing-card__features">
+              <li>Everything in Pro</li>
+              <li>Team dashboard</li>
+              <li>API access</li>
+              <li>Custom agent rules</li>
+              <li>SSO & SAML</li>
+              <li>Dedicated support</li>
+            </ul>
+            <a href="#" class="btn btn--outline btn--full">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── TESTIMONIALS ─── -->
+    <section class="testimonials" id="testimonials">
+      <div class="container">
+        <span class="section-label section-label--light">Testimonials</span>
+        <h2 class="section-title section-title--light">
+          Engineers who tried it<br />don't go back
+        </h2>
+        <div class="testimonials__track">
+          <div class="testimonials__col testimonials__col--slow">
+            <div class="testimonial-card">
+              <div class="testimonial-card__stars">★★★★★</div>
+              <p class="testimonial-card__quote">
+                "Found a hardcoded AWS key we missed for 6 months. The Security
+                Agent caught it in 20 seconds."
+              </p>
+              <div class="testimonial-card__author">
+                <strong>Priya Sharma</strong>
+                <span>Staff Engineer, Stripe</span>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="testimonial-card__stars">★★★★★</div>
+              <p class="testimonial-card__quote">
+                "The Fix Agent opened a PR that actually compiled and passed
+                tests. I've never seen that from a tool before."
+              </p>
+              <div class="testimonial-card__author">
+                <strong>James Chen</strong>
+                <span>CTO, Basecamp</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonials__col testimonials__col--fast">
+            <div class="testimonial-card">
+              <div class="testimonial-card__stars">★★★★★</div>
+              <p class="testimonial-card__quote">
+                "Pointed out 14 N+1 queries we didn't know about. Response times
+                dropped 40% after fixing them."
+              </p>
+              <div class="testimonial-card__author">
+                <strong>Marcus Johnson</strong>
+                <span>Lead Dev, Linear</span>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="testimonial-card__stars">★★★★★</div>
+              <p class="testimonial-card__quote">
+                "We run DevAudit on every PR now. It's like having a senior
+                engineer review your code 24/7."
+              </p>
+              <div class="testimonial-card__author">
+                <strong>Anika Patel</strong>
+                <span>VP Eng, Vercel</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonials__col testimonials__col--slow">
+            <div class="testimonial-card">
+              <div class="testimonial-card__stars">★★★★★</div>
+              <p class="testimonial-card__quote">
+                "The documentation agent rewrote our README and it was genuinely
+                better than what we had. Embarrassingly better."
+              </p>
+              <div class="testimonial-card__author">
+                <strong>Sophie Laurent</strong>
+                <span>Engineering Manager, Datadog</span>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="testimonial-card__stars">★★★★★</div>
+              <p class="testimonial-card__quote">
+                "Watching the agents work in real-time is addictive. Like
+                watching a build log but for code quality."
+              </p>
+              <div class="testimonial-card__author">
+                <strong>Raj Krishnan</strong>
+                <span>Senior SRE, Cloudflare</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FAQ ─── -->
+    <section class="faq" id="faq">
+      <div class="container">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title">Common questions</h2>
+        <div class="faq__list">
+          <div class="faq-item">
+            <button class="faq-item__trigger" aria-expanded="false">
+              <span>How does DevAudit analyze my code?</span>
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__content">
+              <p>
+                We clone your repository, parse the file structure, and chunk
+                files into LLM-safe segments. Five specialized AI agents — each
+                with a different system prompt and toolset — analyze your code
+                in parallel. Each agent focuses on their domain: code quality,
+                security, scalability, documentation, and automated fixes.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-item__trigger" aria-expanded="false">
+              <span>Is my code safe and private?</span>
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__content">
+              <p>
+                Absolutely. We clone your repo temporarily for analysis and
+                delete it immediately after. Your code is never stored
+                permanently, never used for training, and never shared. All
+                connections are encrypted with TLS. For private repos, we use
+                GitHub OAuth with the minimum required permissions.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-item__trigger" aria-expanded="false">
+              <span>Can DevAudit actually fix issues automatically?</span>
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__content">
+              <p>
+                Yes. Our Fix Agent takes all findings from the analysis agents,
+                prioritizes by severity, generates code patches, and opens a
+                real GitHub Pull Request. Each fix is one commit with a clear
+                description. You review and merge — it never pushes directly to
+                your main branch.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-item__trigger" aria-expanded="false">
+              <span>What languages and frameworks does it support?</span>
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__content">
+              <p>
+                DevAudit supports all major languages including Python,
+                JavaScript/TypeScript, Java, Go, Rust, Ruby, and more. The
+                agents understand framework-specific patterns — Django, FastAPI,
+                React, Next.js, Spring Boot, Rails, and others. If it's on
+                GitHub, we can audit it.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-item__trigger" aria-expanded="false">
+              <span>How long does a full audit take?</span>
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__content">
+              <p>
+                Most repositories are fully audited in 2–5 minutes. Because our
+                agents run in parallel, the total time is roughly the time of
+                the slowest agent, not the sum. You can watch the progress in
+                real-time as each agent streams findings to your dashboard.
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-item__trigger" aria-expanded="false">
+              <span>Can I integrate DevAudit into my CI/CD pipeline?</span>
+              <span class="faq-item__icon">+</span>
+            </button>
+            <div class="faq-item__content">
+              <p>
+                Yes — on the Team plan, you get API access to trigger audits
+                programmatically. You can run DevAudit on every push, every PR,
+                or on a schedule. Results are available via API or webhook, so
+                you can block merges on critical security findings.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── CTA BANNER ─── -->
+    <section class="cta-banner">
+      <div class="container">
+        <h2 class="cta-banner__title">
+          Ready to see what's hiding<br />in your codebase?
+        </h2>
+        <p class="cta-banner__subtitle">
+          Start with a free audit. No credit card required.
+        </p>
+        <div class="cta-banner__actions">
+          <a href="#" class="btn btn--accent btn--large">Audit Your Repo Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div class="footer__brand">
+          <a href="#" class="nav__logo">
+            <span class="nav__logo-icon">&#9670;</span>
+            DevAudit
+          </a>
+          <p class="footer__tagline">Your codebase's second brain.</p>
+        </div>
+        <div class="footer__links">
+          <div class="footer__col">
+            <h4>Product</h4>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#">Changelog</a>
+          </div>
+          <div class="footer__col">
+            <h4>Resources</h4>
+            <a href="#">Documentation</a>
+            <a href="#">API Reference</a>
+            <a href="#">Blog</a>
+          </div>
+          <div class="footer__col">
+            <h4>Company</h4>
+            <a href="#">About</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <p>&copy; 2026 DevAudit. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ─── SCRIPTS ─── -->
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
