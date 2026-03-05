@@ -114,6 +114,65 @@ async def github_oauth_callback(code: str):
     return Token(access_token=jwt_token)
 
 
+@router.post("/token-exchange", response_model=Token)
+async def token_exchange(body: dict):
+    """
+    Exchange a GitHub access token for a DevAudit JWT.
+
+    Used by NextAuth: after GitHub OAuth, NextAuth already has the
+    access_token. This endpoint validates it against GitHub's API,
+    upserts the user, and returns our own JWT.
+
+    Body: { "github_access_token": "gho_xxxx..." }
+    """
+    github_access_token = body.get("github_access_token")
+    if not github_access_token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="github_access_token is required",
+        )
+
+    # 1. Validate the token by fetching the GitHub user profile
+    async with httpx.AsyncClient() as client:
+        user_resp = await client.get(
+            "https://api.github.com/user",
+            headers={
+                "Authorization": f"Bearer {github_access_token}",
+                "Accept": "application/vnd.github+json",
+            },
+        )
+
+    if user_resp.status_code != 200:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid GitHub access token",
+        )
+
+    gh_user = user_resp.json()
+
+    # 2. Upsert user in MongoDB
+    user = await User.find_one(User.github_id == gh_user["id"])
+    if user is None:
+        user = User(
+            github_id=gh_user["id"],
+            username=gh_user["login"],
+            email=gh_user.get("email"),
+            avatar_url=gh_user.get("avatar_url"),
+            github_access_token=github_access_token,
+        )
+        await user.insert()
+    else:
+        user.github_access_token = github_access_token
+        user.username = gh_user["login"]
+        user.email = gh_user.get("email")
+        user.avatar_url = gh_user.get("avatar_url")
+        await user.save()
+
+    # 3. Issue our own JWT
+    jwt_token = create_access_token(data={"sub": str(user.github_id)})
+    return Token(access_token=jwt_token)
+
+
 @router.get("/me", response_model=UserResponse)
 async def get_me(current_user: User = Depends(get_current_user)):
     """Return the authenticated user's profile."""
@@ -125,3 +184,4 @@ async def get_me(current_user: User = Depends(get_current_user)):
         avatar_url=current_user.avatar_url,
         created_at=current_user.created_at,
     )
+

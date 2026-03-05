@@ -3,9 +3,9 @@
  *
  * Auth flow:
  *   1. User clicks "Sign in with GitHub" → NextAuth redirects to GitHub OAuth
- *   2. GitHub redirects back with `code` → NextAuth receives it
- *   3. In the `signIn` callback, we forward the code to our backend
- *      (GET /api/v1/auth/github/callback?code=) to get a backend JWT
+ *   2. GitHub redirects back with `code` → NextAuth exchanges it for an access_token
+ *   3. In the `jwt` callback, we POST the access_token to our backend
+ *      (POST /api/v1/auth/token-exchange) to get a DevAudit JWT
  *   4. Backend JWT is stored in the NextAuth session for API calls
  */
 
@@ -24,24 +24,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   callbacks: {
     async jwt({ token, account }) {
-      // On first sign-in, exchange the GitHub code/access_token for our backend JWT
+      // On first sign-in, exchange the GitHub access_token for our backend JWT
       if (account?.access_token) {
         try {
-          // Call our backend to exchange the GitHub token for a DevAudit JWT
           const res = await fetch(
-            `${BACKEND_URL}/api/v1/auth/github/callback?code=${account.access_token}`,
-            { method: "GET" }
+            `${BACKEND_URL}/api/v1/auth/token-exchange`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                github_access_token: account.access_token,
+              }),
+            }
           );
 
           if (res.ok) {
             const data = await res.json();
             token.backendToken = data.access_token;
+          } else {
+            const errBody = await res.text();
+            console.error("Backend token exchange failed:", res.status, errBody);
           }
         } catch (error) {
           console.error("Failed to exchange token with backend:", error);
         }
 
-        // Store GitHub profile info
+        // Store GitHub access token for direct GitHub API calls if needed
         token.githubAccessToken = account.access_token;
       }
 
@@ -49,7 +57,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     async session({ session, token }) {
-      // Expose backend JWT and GitHub info to the client session
+      // Expose backend JWT to the client session
       (session as any).backendToken = token.backendToken as string | undefined;
       return session;
     },

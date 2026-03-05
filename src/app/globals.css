@@ -253,6 +253,14 @@ body::after {
 .da-btn--small { padding: 10px 22px; font-size: 0.8125rem; border-radius: 6px; }
 .da-btn--full { width: 100%; }
 
+.da-btn:disabled,
+.da-btn[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+  pointer-events: none;
+}
+
 /* ═══════════════════════════════════════════════
    NAVIGATION
    ═══════════════════════════════════════════════ */
@@ -1202,6 +1210,19 @@ body::after {
   flex-direction: column;
   align-items: center;
 }
+
+.da-dashboard-home__error {
+  color: var(--da-accent);
+  background-color: rgba(224, 123, 57, 0.1);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-size: 0.875rem;
+  border: 1px solid rgba(224, 123, 57, 0.2);
+  max-width: 600px;
+  width: 100%;
+}
+
 
 .da-dashboard-home__title {
   font-family: var(--da-font-display);

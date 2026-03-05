@@ -14,17 +14,19 @@ import type { AuditListItem } from "@/types/api";
  * Shows a large repo input + recent audits grid.
  */
 export default function DashboardPage() {
-  const { data: session } = useSession();
+  const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
   const [audits, setAudits] = useState<AuditListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState("");
 
   const backendToken = (session as any)?.backendToken as string | undefined;
 
   // Fetch recent audits on mount
   useEffect(() => {
     async function fetchAudits() {
+      if (sessionStatus === "loading") return;
       if (!backendToken) {
         setIsFetching(false);
         return;
@@ -32,25 +34,30 @@ export default function DashboardPage() {
       try {
         const data = await listAudits(backendToken, 0, 10);
         setAudits(data);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Failed to fetch audits:", err);
       } finally {
         setIsFetching(false);
       }
     }
     fetchAudits();
-  }, [backendToken]);
+  }, [backendToken, sessionStatus]);
 
   // Start a new audit
   const handleStartAudit = useCallback(
     async (repoUrl: string) => {
-      if (!backendToken) return;
+      if (!backendToken) {
+        setError("Not authenticated with backend. Please sign out and sign back in.");
+        return;
+      }
       setIsLoading(true);
+      setError("");
       try {
         const audit = await startAudit(repoUrl, backendToken);
         router.push(`/dashboard/audit/${audit.id}`);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Failed to start audit:", err);
+        setError(err.message || "Failed to start audit. Is the backend running?");
         setIsLoading(false);
       }
     },
@@ -68,6 +75,9 @@ export default function DashboardPage() {
           Paste a GitHub repository URL to begin your AI-powered code review.
         </p>
         <RepoInput onSubmit={handleStartAudit} isLoading={isLoading} />
+        {error && (
+          <p className="da-dashboard-home__error">{error}</p>
+        )}
       </div>
 
       {/* Recent Audits */}
@@ -95,3 +105,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
