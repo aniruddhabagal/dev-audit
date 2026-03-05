@@ -71,8 +71,12 @@ const FAQS = [
 /* ═══════════════════════════════════════════════
    COMPONENT
    ═══════════════════════════════════════════════ */
+import { useSession, signIn } from "next-auth/react";
+import Link from "next/link";
+
 export default function LandingPage() {
   const lenisRef = useRef<Lenis | null>(null);
+  const { data: session } = useSession();
 
   /* ─── FAQ Toggle ─── */
   const handleFaqClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -126,8 +130,20 @@ export default function LandingPage() {
       anchor.addEventListener("click", (e) => {
         e.preventDefault();
         const href = (anchor as HTMLAnchorElement).getAttribute("href");
-        const target = href ? document.querySelector(href) : null;
-        if (target) lenis.scrollTo(target as HTMLElement, { offset: -72, duration: 1.2 });
+        if (!href) return;
+        
+        if (href === "#") {
+          // Scroll to top
+          lenis.scrollTo(0, { duration: 1.2 });
+          return;
+        }
+
+        try {
+          const target = document.querySelector(href);
+          if (target) lenis.scrollTo(target as HTMLElement, { offset: -72, duration: 1.2 });
+        } catch (err) {
+          // Ignore invalid selectors to prevent crashes
+        }
       });
     });
 
@@ -206,7 +222,23 @@ export default function LandingPage() {
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="#faq">FAQ</a></li>
           </ul>
-          <a href="#da-hero" className="da-btn da-btn--small da-btn--accent da-nav__cta-desktop">Get Started</a>
+          
+          {session ? (
+            <Link
+              href="/dashboard"
+              className="da-btn da-btn--small da-btn--accent da-nav__cta-desktop"
+            >
+              Go to Dashboard
+            </Link>
+          ) : (
+            <button
+              onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+              className="da-btn da-btn--small da-btn--accent da-nav__cta-desktop"
+            >
+              Log in with GitHub
+            </button>
+          )}
+
           <button className="da-nav__burger" aria-label="Toggle menu">
             <span /><span /><span />
           </button>
@@ -228,7 +260,21 @@ export default function LandingPage() {
               with agents that actually fix things.
             </p>
             <div className="da-hero__actions">
-              <a href="#" className="da-btn da-btn--accent da-btn--large">Audit Your Repo</a>
+              {session ? (
+                <Link
+                  href="/dashboard"
+                  className="da-btn da-btn--accent da-btn--large"
+                >
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <button
+                  onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+                  className="da-btn da-btn--accent da-btn--large"
+                >
+                  Audit Your Repo
+                </button>
+              )}
               <a href="#features" className="da-btn da-btn--ghost da-btn--large">See How It Works</a>
             </div>
           </div>
