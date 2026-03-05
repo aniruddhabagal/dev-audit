@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Newsreader } from "next/font/google";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -36,7 +37,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${newsreader.variable} antialiased`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
